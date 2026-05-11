@@ -1,52 +1,52 @@
-# Auditflow
+# ✦ Auditflow: Professional Invoice Intelligence
 
-**Auditflow** is a premium, serverless invoice extraction tool designed for auditors and business professionals. It leverages state-of-the-art Multimodal AI to transform messy, handwritten, or multi-page documents into structured, audit-ready Excel spreadsheets in seconds.
+**Auditflow** is a high-performance, AI-driven document extraction platform designed to transform unstructured invoices into audit-ready data. Built with a "Privacy-First" architecture, it leverages state-of-the-art Multimodal LLMs to automate complex data entry tasks with near-instantaneous speed.
 
-![Auditflow UI](https://img.shields.io/badge/UI-Modern%20Dark-A78BFA)
-![AI-Powered](https://img.shields.io/badge/AI-Llama%204%20Scout-F472B6)
-![Serverless](https://img.shields.io/badge/Architecture-100%25%20Client--Side-34D399)
-
-## 🚀 Deployment (Vercel)
-
-Auditflow is optimized for one-click deployment on Vercel:
-
-1. **Push to GitHub**: Push this repository to your GitHub account.
-2. **Import to Vercel**: Connect your repository to Vercel.
-3. **Set Environment Variables**: In the Vercel dashboard, go to **Settings > Environment Variables** and add:
-   - `GROQ_API_KEY`: Your private Groq API key.
-4. **Deploy**: Vercel will automatically host the frontend and the secure serverless backend.
-
-## ✦ Key Features
-
-- **Secure API Proxy**: Your API key is stored safely on Vercel's backend and is never exposed to users in the browser.
-- **Universal File Support**: Seamlessly process batch uploads of **PDF**, **JPEG**, **JPG**, and **PNG** files simultaneously.
-- **Automated Entity Mapping**: Intelligently distinguishes between the **Seller** (header/letterhead) and the **Buyer** (billed customer) without manual tagging.
-- **Batch Processing**: Handles multiple documents in a sequential queue, providing a consolidated audit view.
-- **One-Click Export**: Generate professionally formatted `.xlsx` reports containing all extracted billing details.
-- **Privacy-First Architecture**: 100% client-side processing. Your documents never touch our servers; data flows directly from your browser to the inference engine.
-
-## 🚀 Getting Started
-
-Auditflow requires zero setup. 
-
-1. Clone or download this repository.
-2. Open `index.html` in any modern web browser (Chrome, Safari, Edge).
-3. Drag and drop your invoices into the upload zone.
-4. Review the extracted data in the interactive table.
-5. Click **Download Spreadsheet** to finalize your report.
-
-## 🛠 Technology Stack
-
-- **Inference Engine**: Groq Llama 4 Scout (Multimodal Vision)
-- **PDF Processing**: `pdf.js` for client-side document rendering
-- **Spreadsheet Logic**: `SheetJS` (XLSX.js)
-- **Styling**: Vanilla CSS3 with Glassmorphism and Micro-animations
-- **Logic**: Modern ES6+ JavaScript
-
-## ⚖️ License
-
-Built for personal and professional audit use. All rights reserved.
+![Tech Stack](https://img.shields.io/badge/Stack-JS%20|%20Node.js%20|%20Groq%20|%20Vercel-A78BFA)
+![AI Model](https://img.shields.io/badge/AI-Llama%204%20Scout%20(Multimodal)-F472B6)
+![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20Serverless-34D399)
 
 ---
 
-*Designed with ❤️ for auditors who value speed and elegance.*
+## 🚀 The Mission
+Auditors often spend hours manually transcribing data from messy, handwritten or digital invoices. Auditflow eliminates this bottleneck by providing a seamless, batch-processing workflow that extracts key financial metadata with high precision, allowing professionals to focus on analysis rather than data entry.
+
+## 🛠️ How It Works (Architecture)
+Auditflow employs a hybrid processing model that ensures both security and flexibility:
+
+1.  **Client-Side Pre-processing**:
+    -   **PDF-to-Image**: Uses `pdf.js` to render multi-page PDFs into high-resolution images entirely in the browser.
+    -   **Base64 Encoding**: Invoices are prepared for AI consumption without ever being stored on a server.
+2.  **Intelligent Extraction Engine**:
+    -   **Hybrid Proxy System**: Data is routed through a secure Vercel Serverless Function (Proxy Mode) to protect API keys, with a Direct-to-API fallback for local development.
+    -   **Context-Aware OCR**: Leverages Llama 4 Scout's vision capabilities to intelligently distinguish between **Sellers** (letterheads) and **Buyers** (customers).
+3.  **Resilience & Reliability**:
+    -   **Exponential Backoff**: Handles API rate limits (TPM/RPM) gracefully by automatically retrying requests.
+    -   **Robust JSON Parsing**: Implements regex-based fallback parsing to ensure data integrity even when models return non-standard responses.
+4.  **Data Export**:
+    -   Uses `SheetJS` to generate professionally formatted `.xlsx` spreadsheets on-the-fly.
+
+## ✦ Key Features
+-   **Multi-Page PDF Support**: Automatically processes every page of a document.
+-   **Batch Processing**: Drag and drop dozens of files; Auditflow handles the queue and merges results.
+-   **Interactive Data Grid**: Review, edit, and audit extracted data before exporting.
+-   **Zero-Setup Direct Mode**: Enter an API key in the app settings to use the tool locally without any backend configuration.
+-   **Privacy-First**: Documents never touch our storage; data flows directly to the inference engine.
+
+## 💻 Tech Stack
+-   **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3 (Glassmorphism & Micro-animations)
+-   **Backend**: Node.js, Vercel Serverless Functions
+-   **AI Infrastructure**: Groq Inference Engine (Llama 4 Scout)
+-   **Libraries**: `pdf.js` (Document Rendering), `SheetJS` (Excel Generation)
+
+## 🚀 Getting Started
+
+### Local Use (Zero Setup)
+1. Clone the repository.
+2. Open `index.html` in your browser.
+3. Click the **Settings (⚙️)** icon and paste your [Groq API Key](https://console.groq.com/keys).
+4. Start uploading!
+
+---
+
+*Designed for speed. Engineered for precision. Built for auditors.*
