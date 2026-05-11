@@ -336,6 +336,76 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
+        /* Settings Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+        }
+
+        .input-group {
+            margin-top: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .btn-settings {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .btn-settings:hover {
+            color: var(--text);
+            border-color: var(--text-dim);
+            background: rgba(255,255,255,0.05);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
@@ -345,9 +415,27 @@
     </style>
 </head>
 <body>
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 0.5rem;">API Settings</h2>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">For local use, provide your API key directly. This is saved only in your browser.</p>
+            
+            <div class="input-group">
+                <label>Groq API Key</label>
+                <input type="password" id="local-api-key" placeholder="gsk_...">
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <nav>
+        <nav style="justify-content: space-between;">
             <div class="logo">Auditflow</div>
+            <button class="btn-settings" onclick="openSettings()">⚙ Settings</button>
         </nav>
 
         <section class="hero">
@@ -423,6 +511,20 @@
         // Backend URL for secure extraction
         const API_ENDPOINT = '/api/extract';
 
+        // Load local key on start
+        let localKey = localStorage.getItem('auditflow_api_key') || '';
+        
+        function openSettings() { 
+            document.getElementById('local-api-key').value = localKey;
+            document.getElementById('settings-modal').style.display = 'flex'; 
+        }
+        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+        function saveSettings() {
+            localKey = document.getElementById('local-api-key').value.trim();
+            localStorage.setItem('auditflow_api_key', localKey);
+            closeSettings();
+        }
+
         dropZone.onclick = () => fileInput.click();
 
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover'); };
@@ -438,6 +540,14 @@
         async function handleFiles(files) {
             const fileList = Array.from(files);
             if (fileList.length === 0) return;
+
+            // Check if there is existing data
+            if (tableBody.children.length > 0) {
+                const choice = confirm("Existing data detected. Would you like to CLEAR the current list before adding new invoices?\n\n- Click 'OK' to Clear\n- Click 'Cancel' to Append");
+                if (choice) {
+                    tableBody.innerHTML = '';
+                }
+            }
 
             processingStats.style.display = 'block';
             progressBarContainer.style.display = 'block';
@@ -462,7 +572,7 @@
                     }
                 } catch (error) {
                     console.error(error);
-                    alert(`Could not process ${file.name}. Please ensure it is a clear image.`);
+                    alert(`Error processing ${file.name}: ${error.message}\n\nPlease check your API key and connection.`);
                 }
                 
                 completed++;
@@ -503,19 +613,113 @@
             return images;
         }
 
-        async function extractWithGroqVision(base64Image) {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: base64Image })
-            });
-
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || 'Server Error');
+        async function extractWithGroqVision(base64Image, retryCount = 0) {
+            // Try direct mode if local key is provided
+            if (localKey) {
+                return await extractDirectlyFromBrowser(base64Image, retryCount);
             }
-            
-            return await response.json();
+
+            // Otherwise, use the proxy
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle Daily Limit
+                    if (data.code === 'DAILY_LIMIT_REACHED') {
+                        alert('Daily Rate Limit Reached! 🛑\n\nYour Groq account has reached its daily request limit. Please try again tomorrow or upgrade your plan.');
+                        throw new Error('Daily Limit Reached');
+                    }
+
+                    // Handle TPM/RPM Rate Limit (Retry)
+                    if (response.status === 429 && retryCount < 5) {
+                        const waitTime = Math.pow(2, retryCount) * 1000 + (Math.random() * 1000);
+                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime/1000)}s...`);
+                        await new Promise(r => setTimeout(r, waitTime));
+                        return await extractWithGroqVision(base64Image, retryCount + 1);
+                    }
+
+                    throw new Error(data.error || 'Server Error');
+                }
+                
+                return data;
+            } catch (error) {
+                if (error.message === 'Failed to fetch') {
+                    throw new Error('Could not connect to the server. If you are running locally, please enter your API Key in the Settings (⚙).');
+                }
+                throw error;
+            }
+        }
+
+        async function extractDirectlyFromBrowser(base64Image, retryCount = 0) {
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: [
+                                    {
+                                        type: 'text',
+                                        text: 'Extract billing information from this image. Return ONLY a valid JSON object with these exact keys: gst_no, seller_name, buyer_name, bill_no, date, amount, rate, cgst, sgst, total_tax, total. Identify SELLER as the entity in the header and BUYER as the customer. If a field is missing, use an empty string.'
+                                    },
+                                    {
+                                        type: 'image_url',
+                                        image_url: { url: `data:image/jpeg;base64,${base64Image}` }
+                                    }
+                                ]
+                            }
+                        ],
+                        response_format: { type: 'json_object' },
+                        temperature: 0
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const message = data.error?.message || '';
+                    const isDaily = /daily limit|requests per day|limit for the day/i.test(message);
+
+                    if (isDaily) {
+                        alert('Daily Rate Limit Reached! 🛑\n\nYour Groq account has reached its daily request limit. Please try again tomorrow or upgrade your plan.');
+                        throw new Error('Daily Limit Reached');
+                    }
+
+                    if (response.status === 429 && retryCount < 5) {
+                        const waitTime = Math.pow(2, retryCount) * 1000 + (Math.random() * 1000);
+                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime/1000)}s...`);
+                        await new Promise(r => setTimeout(r, waitTime));
+                        return await extractDirectlyFromBrowser(base64Image, retryCount + 1);
+                    }
+
+                    throw new Error(data.error?.message || 'Groq API failed');
+                }
+
+                const rawContent = data.choices[0].message.content;
+                
+                try {
+                    return JSON.parse(rawContent);
+                } catch (e) {
+                    const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) return JSON.parse(jsonMatch[0]);
+                    throw new Error('Invalid JSON response from AI');
+                }
+            } catch (error) {
+                if (error.message === 'Daily Limit Reached') throw error;
+                throw error;
+            }
         }
 
         function addAuditRow(data) {

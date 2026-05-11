@@ -6,9 +6,19 @@
 ![AI-Powered](https://img.shields.io/badge/AI-Llama%204%20Scout-F472B6)
 ![Serverless](https://img.shields.io/badge/Architecture-100%25%20Client--Side-34D399)
 
+## 🚀 Deployment (Vercel)
+
+Auditflow is optimized for one-click deployment on Vercel:
+
+1. **Push to GitHub**: Push this repository to your GitHub account.
+2. **Import to Vercel**: Connect your repository to Vercel.
+3. **Set Environment Variables**: In the Vercel dashboard, go to **Settings > Environment Variables** and add:
+   - `GROQ_API_KEY`: Your private Groq API key.
+4. **Deploy**: Vercel will automatically host the frontend and the secure serverless backend.
+
 ## ✦ Key Features
 
-- **Multimodal Intelligence**: Powered by `Llama 4 Scout` on Groq, capable of reading handwritten text and complex invoice layouts with extreme precision.
+- **Secure API Proxy**: Your API key is stored safely on Vercel's backend and is never exposed to users in the browser.
 - **Universal File Support**: Seamlessly process batch uploads of **PDF**, **JPEG**, **JPG**, and **PNG** files simultaneously.
 - **Automated Entity Mapping**: Intelligently distinguishes between the **Seller** (header/letterhead) and the **Buyer** (billed customer) without manual tagging.
 - **Batch Processing**: Handles multiple documents in a sequential queue, providing a consolidated audit view.
