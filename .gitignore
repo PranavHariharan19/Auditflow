@@ -9,3 +9,4 @@ Thumbs.db
 # Project artifacts
 audit_report_*.xlsx
 auditflow_export.xlsx
+.vercel
