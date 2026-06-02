@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,8 +74,15 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .logo {
@@ -105,8 +113,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         h1 {
@@ -135,14 +148,14 @@
             max-width: 700px;
             margin: 0 auto;
             position: relative;
-            box-shadow: 0 4px 64px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 64px rgba(0, 0, 0, 0.4);
         }
 
         .upload-area:hover {
             border-color: var(--primary);
             background: rgba(59, 130, 246, 0.04);
             transform: scale(1.02);
-            box-shadow: 0 20px 80px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.1);
         }
 
         .upload-icon {
@@ -153,8 +166,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* Processing Queue */
@@ -199,8 +219,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
@@ -209,7 +236,7 @@
             border: 1px solid var(--border);
             padding: 2.5rem;
             backdrop-filter: blur(24px);
-            box-shadow: 0 20px 100px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 100px rgba(0, 0, 0, 0.6);
         }
 
         .table-wrapper {
@@ -244,8 +271,15 @@
         }
 
         @keyframes rowEntrance {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         input[type="text"] {
@@ -326,10 +360,23 @@
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { height: 8px; width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
 
         /* Settings Modal */
         .modal {
@@ -353,7 +400,7 @@
             padding: 2.5rem;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
         }
 
         .input-group {
@@ -403,18 +450,28 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .container { padding: 1.5rem; }
-            .upload-area { padding: 3rem 1.5rem; }
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .upload-area {
+                padding: 3rem 1.5rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom: 0.5rem;">API Settings</h2>
-            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">For local use, provide your API key directly. This is saved only in your browser.</p>
-            
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">For local use, provide your API
+                key directly. This is saved only in your browser.</p>
+
             <div class="input-group">
                 <label>Groq API Key</label>
                 <input type="password" id="local-api-key" placeholder="gsk_...">
@@ -436,7 +493,7 @@
         <section class="hero">
             <h1>Invoice Extractor</h1>
             <p class="subtitle">Extract data from multiple bills and organise them</p>
-            
+
             <div class="upload-area" id="drop-zone">
                 <span class="upload-icon">✦</span>
                 <h3>Drop invoices here</h3>
@@ -457,7 +514,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h2 style="font-weight: 600; letter-spacing: -0.5px;">Extracted Data</h2>
                 </div>
-                
+
                 <div class="table-wrapper">
                     <table id="bill-table">
                         <thead>
@@ -487,7 +544,8 @@
                     <button class="btn btn-primary" onclick="exportToExcel()">
                         <span>Download Spreadsheet</span>
                     </button>
-                    <button class="btn btn-danger" style="font-size: 0.8rem; margin-left: 1rem;" onclick="clearResults()">Clear Session</button>
+                    <button class="btn btn-danger" style="font-size: 0.8rem; margin-left: 1rem;"
+                        onclick="clearResults()">Clear Session</button>
                 </div>
             </div>
         </section>
@@ -502,16 +560,16 @@
         const progressBar = document.getElementById('progress-bar');
         const resultsContainer = document.getElementById('results-container');
         const tableBody = document.getElementById('table-body');
-        
+
         // Backend URL for secure extraction
         const API_ENDPOINT = '/api/extract';
 
         // Load local key on start
         let localKey = localStorage.getItem('auditflow_api_key') || '';
-        
-        function openSettings() { 
+
+        function openSettings() {
             document.getElementById('local-api-key').value = localKey;
-            document.getElementById('settings-modal').style.display = 'flex'; 
+            document.getElementById('settings-modal').style.display = 'flex';
         }
         function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
         function saveSettings() {
@@ -551,7 +609,7 @@
             let completed = 0;
             for (const file of fileList) {
                 updateStatus(`Analysing ${file.name}...`, (completed / fileList.length) * 100);
-                
+
                 try {
                     let imagesToProcess = [];
                     if (file.type === 'application/pdf') {
@@ -569,7 +627,7 @@
                     console.error(error);
                     alert(`Error processing ${file.name}: ${error.message}\n\nPlease check your API key and connection.`);
                 }
-                
+
                 completed++;
                 updateStatus(`Completed ${completed}/${fileList.length}`, (completed / fileList.length) * 100);
             }
@@ -634,14 +692,14 @@
                     // Handle TPM/RPM Rate Limit (Retry)
                     if (response.status === 429 && retryCount < 5) {
                         const waitTime = Math.pow(2, retryCount) * 1000 + (Math.random() * 1000);
-                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime/1000)}s...`);
+                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime / 1000)}s...`);
                         await new Promise(r => setTimeout(r, waitTime));
                         return await extractWithGroqVision(base64Image, retryCount + 1);
                     }
 
                     throw new Error(data.error || 'Server Error');
                 }
-                
+
                 return data;
             } catch (error) {
                 if (error.message === 'Failed to fetch') {
@@ -694,7 +752,7 @@
 
                     if (response.status === 429 && retryCount < 5) {
                         const waitTime = Math.pow(2, retryCount) * 1000 + (Math.random() * 1000);
-                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime/1000)}s...`);
+                        updateStatus(`Rate limit hit. Retrying in ${Math.round(waitTime / 1000)}s...`);
                         await new Promise(r => setTimeout(r, waitTime));
                         return await extractDirectlyFromBrowser(base64Image, retryCount + 1);
                     }
@@ -703,7 +761,7 @@
                 }
 
                 const rawContent = data.choices[0].message.content;
-                
+
                 try {
                     return JSON.parse(rawContent);
                 } catch (e) {
@@ -720,7 +778,7 @@
         function addAuditRow(data) {
             const tr = document.createElement('tr');
             const fields = ['gst_no', 'seller_name', 'buyer_name', 'bill_no', 'date', 'amount', 'rate', 'cgst', 'sgst', 'total_tax', 'total'];
-            
+
             fields.forEach((field, index) => {
                 const td = document.createElement('td');
                 td.style.animationDelay = `${index * 50}ms`;
@@ -779,4 +837,5 @@
         }
     </script>
 </body>
+
 </html>
