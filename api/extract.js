@@ -46,7 +46,7 @@ export default async function handler(req, res) {
                         content: [
                             {
                                 type: 'text',
-                                text: 'Extract billing information from this image. Return ONLY a valid JSON object with these exact keys: gst_no, seller_name, buyer_name, bill_no, date, amount, rate, cgst, sgst, total_tax, total. Identify SELLER as the entity in the header and BUYER as the customer. If a field is missing, use an empty string.'
+                                text: 'CRITICAL STEP 1 - DOCUMENT TYPE EXCLUSION:\nLook at the primary title/header of the page to determine if it is an "e-Way Bill document" vs a "Tax Invoice".\n- If the document is an e-Way Bill document (i.e. the main page heading says "e-Way Bill" or "1. e-Way Bill Details", transport slip, or delivery note), YOU MUST IMMEDIATELY STOP and return EXACTLY:\n{"ignore": true, "document_type": "e-Way Bill"}\n- IMPORTANT DISTINCTION: If the document is a "Tax Invoice" / Commercial Invoice that happens to contain an "e-Way Bill No." field alongside "Invoice No." or "Dated", DO NOT IGNORE IT! That is a valid Tax Invoice. Proceed to extract billing information from the Tax Invoice!\n\nONLY IF the document is a Tax Invoice / Commercial Invoice, extract the following fields according to these STRICT structural rules:\n1. BUYER GST RULE (gst_no): ALWAYS fetch the GSTIN number belonging to the BUYER / Consignee (e.g. under "Buyer (Bill to)", "Consignee (Ship to)", or "Ship To"). Do NOT return the Seller/Supplier GSTIN.\n2. SUBTOTAL AMOUNT RULE (amount): If there are multiple line item amounts (e.g. item values + charges), ALWAYS extract the amount that is the sum of all those item amounts (the Total Taxable Value / Subtotal before tax, e.g. 11,33,600.00). Do not pick a single line item amount.\n3. SUM OF TAX RATES RULE (rate): In the rate column/field, ALWAYS extract the sum of all tax rate percentages as a single number. For example, if Output CGST is 9% and Output SGST is 9%, the rate must be 18 (because 9+9=18). If IGST is 18%, rate is 18.\n\nReturn ONLY a valid JSON object with these exact keys: ignore, document_type, gst_no, seller_name, buyer_name, bill_no, date, amount, rate, cgst, sgst, total_tax, total. For a Tax Invoice, set "ignore": false and "document_type": "Tax Invoice". If a field is missing, use an empty string.'
                             },
                             {
                                 type: 'image_url',
@@ -101,6 +101,15 @@ export default async function handler(req, res) {
             } else {
                 throw new Error('Could not extract valid JSON from model response');
             }
+        }
+
+        if (
+            content.ignore === true ||
+            content.ignore === "true" ||
+            content.document_type === "e-Way Bill" ||
+            /^\s*e[- ]?way\s*bill\s*$/i.test(content.document_type || "")
+        ) {
+            return res.status(200).json({ ignore: true, document_type: "e-Way Bill" });
         }
 
         return res.status(200).json(content);

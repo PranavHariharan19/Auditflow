@@ -92,17 +92,16 @@
             letter-spacing: -1px;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.65rem;
         }
 
-        .logo::before {
-            content: '';
-            width: 32px;
-            height: 32px;
-            background: var(--text);
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(2, 52, 63, 0.2);
-            display: inline-block;
+        .logo-img {
+            height: 44px;
+            width: 44px;
+            object-fit: cover;
+            object-position: top center;
+            mix-blend-mode: multiply;
+            display: block;
         }
 
         /* Hero Section */
@@ -337,6 +336,20 @@
             box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
         }
 
+        .btn-download {
+            background: var(--text);
+            color: #ffffff;
+            border: 1.5px solid var(--text);
+            box-shadow: 0 10px 30px rgba(2, 52, 63, 0.3);
+        }
+
+        .btn-download:hover {
+            background: #044d5d;
+            border-color: #044d5d;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(2, 52, 63, 0.4);
+        }
+
         .btn-secondary {
             background: var(--glass);
             color: var(--text);
@@ -448,6 +461,171 @@
             background: rgba(2, 52, 63, 0.05);
         }
 
+        /* Dynamic Centered Layout & Floating Button */
+        .container.table-centered {
+            min-height: calc(100vh - 3rem);
+            display: flex;
+            flex-direction: column;
+            width: 98%;
+            max-width: 1850px;
+            padding: 1.5rem 0.75rem;
+            margin: 0 auto;
+        }
+
+        .container.table-centered nav {
+            margin-bottom: 2rem;
+            flex-shrink: 0;
+        }
+
+        .hero.minimized h1,
+        .hero.minimized .subtitle,
+        .hero.minimized #drop-zone {
+            display: none;
+        }
+
+        .hero.minimized {
+            margin-bottom: 1rem;
+        }
+
+        .hero.minimized #processing-stats {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        #results-container {
+            display: none;
+            width: 100%;
+            margin: 0 auto;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .container.table-centered #results-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container.table-centered .card {
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.75rem 1.25rem;
+            border-radius: 24px;
+        }
+
+        .container.table-centered .table-wrapper {
+            margin-top: 1.25rem;
+            border-radius: 16px;
+            width: 100%;
+        }
+
+        .container.table-centered table {
+            min-width: 1650px;
+            width: 100%;
+        }
+
+        .container.table-centered th {
+            padding: 1rem 0.65rem;
+            font-size: 0.85rem;
+        }
+
+        .container.table-centered td {
+            padding: 0.85rem 0.65rem;
+        }
+
+        .container.table-centered th:first-child,
+        .container.table-centered td:first-child {
+            padding-left: 0.85rem;
+        }
+
+        .container.table-centered input[type="text"] {
+            font-size: 1rem;
+            padding: 0.65rem 0.5rem;
+        }
+
+        /* Column sizing for extra space across all fields */
+        .container.table-centered th:nth-child(1),
+        .container.table-centered td:nth-child(1) { min-width: 150px; } /* GST NO */
+
+        .container.table-centered th:nth-child(2),
+        .container.table-centered td:nth-child(2) { min-width: 230px; } /* SELLER */
+
+        .container.table-centered th:nth-child(3),
+        .container.table-centered td:nth-child(3) { min-width: 230px; } /* BUYER */
+
+        .container.table-centered th:nth-child(4),
+        .container.table-centered td:nth-child(4) { min-width: 135px; } /* BILL NO */
+
+        .container.table-centered th:nth-child(5),
+        .container.table-centered td:nth-child(5) { min-width: 125px; } /* DATE */
+
+        .container.table-centered th:nth-child(6),
+        .container.table-centered td:nth-child(6),
+        .container.table-centered th:nth-child(7),
+        .container.table-centered td:nth-child(7),
+        .container.table-centered th:nth-child(8),
+        .container.table-centered td:nth-child(8),
+        .container.table-centered th:nth-child(9),
+        .container.table-centered td:nth-child(9),
+        .container.table-centered th:nth-child(10),
+        .container.table-centered td:nth-child(10),
+        .container.table-centered th:nth-child(11),
+        .container.table-centered td:nth-child(11) { min-width: 115px; } /* AMOUNTS / TAXES / RATES */
+
+        .floating-btn {
+            background: var(--text); /* #02343F exact same color as Auditflow text */
+            color: #ffffff;
+            border: 1.5px solid var(--text);
+            height: 42px;
+            padding: 0 1.15rem;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(2, 52, 63, 0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .floating-btn.visible {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .floating-btn:hover {
+            background: #044d5d;
+            border-color: #044d5d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(2, 52, 63, 0.35);
+        }
+
+        .floating-btn .plus-icon {
+            font-size: 1.35rem;
+            font-weight: 400;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-btn .btn-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .floating-btn.dragover {
+            border-color: #ffffff;
+            background: var(--accent);
+            transform: scale(1.08);
+            box-shadow: 0 0 25px var(--accent);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 {
@@ -484,13 +662,22 @@
         </div>
     </div>
 
-    <div class="container">
-        <nav style="justify-content: space-between;">
-            <div class="logo">Auditflow</div>
-            <button class="btn-settings" onclick="openSettings()">⚙ Settings</button>
+    <div class="container" id="main-container">
+        <nav style="justify-content: space-between; align-items: center;">
+            <div class="logo">
+                <img src="logo.png" alt="AuditFlow" class="logo-img">
+                <span>Auditflow</span>
+            </div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 1rem;">
+                <button id="floating-upload-btn" class="floating-btn" title="Add More Invoices" onclick="document.getElementById('file-input').click()">
+                    <span class="plus-icon">+</span>
+                    <span class="btn-text">Add Invoices</span>
+                </button>
+                <button class="btn-settings" onclick="openSettings()">⚙ Settings</button>
+            </div>
         </nav>
 
-        <section class="hero">
+        <section class="hero" id="hero-section">
             <h1>Invoice Extractor</h1>
             <p class="subtitle">Extract data from multiple bills and organise them</p>
 
@@ -541,7 +728,7 @@
 
                 <div class="actions">
                     <button class="btn btn-secondary" onclick="addRow()">Add Row</button>
-                    <button class="btn btn-primary" onclick="exportToExcel()">
+                    <button class="btn btn-download" onclick="exportToExcel()">
                         <span>Download Spreadsheet</span>
                     </button>
                     <button class="btn btn-danger" style="font-size: 0.8rem; margin-left: 1rem;"
@@ -560,6 +747,9 @@
         const progressBar = document.getElementById('progress-bar');
         const resultsContainer = document.getElementById('results-container');
         const tableBody = document.getElementById('table-body');
+        const heroSection = document.getElementById('hero-section');
+        const mainContainer = document.getElementById('main-container');
+        const floatingUploadBtn = document.getElementById('floating-upload-btn');
 
         // Backend URL for secure extraction
         const API_ENDPOINT = '/api/extract';
@@ -578,7 +768,11 @@
             closeSettings();
         }
 
-        dropZone.onclick = () => fileInput.click();
+        dropZone.onclick = (e) => {
+            if (e.target !== fileInput) {
+                fileInput.click();
+            }
+        };
 
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover'); };
         dropZone.ondragleave = () => dropZone.classList.remove('dragover');
@@ -588,23 +782,47 @@
             handleFiles(e.dataTransfer.files);
         };
 
-        fileInput.onchange = (e) => handleFiles(e.target.files);
+        fileInput.onchange = (e) => {
+            handleFiles(e.target.files);
+            e.target.value = '';
+        };
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            window.addEventListener(eventName, (e) => {
+                if (heroSection.classList.contains('minimized')) {
+                    e.preventDefault();
+                    floatingUploadBtn.classList.add('dragover');
+                }
+            }, false);
+        });
+
+        window.addEventListener('dragleave', (e) => {
+            if (e.target === floatingUploadBtn || e.target === document.body) {
+                floatingUploadBtn.classList.remove('dragover');
+            }
+        }, false);
+
+        window.addEventListener('drop', (e) => {
+            if (heroSection.classList.contains('minimized')) {
+                e.preventDefault();
+                floatingUploadBtn.classList.remove('dragover');
+                if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            }
+        }, false);
 
         async function handleFiles(files) {
             const fileList = Array.from(files);
             if (fileList.length === 0) return;
 
-            // Check if there is existing data
-            if (tableBody.children.length > 0) {
-                const choice = confirm("Existing data detected. Would you like to CLEAR the current list before adding new invoices?\n\n- Click 'OK' to Clear\n- Click 'Cancel' to Append");
-                if (choice) {
-                    tableBody.innerHTML = '';
-                }
-            }
+            heroSection.classList.add('minimized');
+            mainContainer.classList.add('table-centered');
+            floatingUploadBtn.classList.add('visible');
 
             processingStats.style.display = 'block';
             progressBarContainer.style.display = 'block';
-            resultsContainer.style.display = 'block';
+            resultsContainer.style.display = 'flex';
 
             let completed = 0;
             for (const file of fileList) {
@@ -620,6 +838,15 @@
 
                     for (let j = 0; j < imagesToProcess.length; j++) {
                         const extracted = await extractWithGroqVision(imagesToProcess[j]);
+                        if (
+                            extracted.ignore === true ||
+                            extracted.ignore === "true" ||
+                            extracted.document_type === "e-Way Bill" ||
+                            /^\s*e[- ]?way\s*bill\s*$/i.test(extracted.document_type || "")
+                        ) {
+                            console.log('Skipping e-Way bill item:', extracted);
+                            continue;
+                        }
                         // Add row with a slight delay for pleasant entrance
                         setTimeout(() => addAuditRow(extracted), j * 100);
                     }
@@ -654,6 +881,21 @@
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
+                
+                // Zero-token instant PDF text layer e-Way bill document check
+                try {
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    const isEwayBillDoc = /\b(?:1\.\s*)?e[- ]?way\s*bill\s*details\b/i.test(pageText) || 
+                                          (/^\s*e[- ]?way\s*bill\b/i.test(pageText) && !/\btax\s*invoice\b|\bbill\s*to\b/i.test(pageText));
+                    if (isEwayBillDoc) {
+                        console.log(`Skipping PDF page ${i}: e-Way bill document detected via text layer.`);
+                        continue;
+                    }
+                } catch (e) {
+                    console.warn(`Could not check text layer on page ${i}, proceeding with vision check.`);
+                }
+
                 const viewport = page.getViewport({ scale: 2 });
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
@@ -725,7 +967,7 @@
                                 content: [
                                     {
                                         type: 'text',
-                                        text: 'Extract billing information from this image. Return ONLY a valid JSON object with these exact keys: gst_no, seller_name, buyer_name, bill_no, date, amount, rate, cgst, sgst, total_tax, total. Identify SELLER as the entity in the header and BUYER as the customer. If a field is missing, use an empty string.'
+                                        text: 'CRITICAL STEP 1 - DOCUMENT TYPE EXCLUSION:\nLook at the primary title/header of the page to determine if it is an "e-Way Bill document" vs a "Tax Invoice".\n- If the document is an e-Way Bill document (i.e. the main page heading says "e-Way Bill" or "1. e-Way Bill Details", transport slip, or delivery note), YOU MUST IMMEDIATELY STOP and return EXACTLY:\n{"ignore": true, "document_type": "e-Way Bill"}\n- IMPORTANT DISTINCTION: If the document is a "Tax Invoice" / Commercial Invoice that happens to contain an "e-Way Bill No." field alongside "Invoice No." or "Dated", DO NOT IGNORE IT! That is a valid Tax Invoice. Proceed to extract billing information from the Tax Invoice!\n\nONLY IF the document is a Tax Invoice / Commercial Invoice, extract the following fields according to these STRICT structural rules:\n1. BUYER GST RULE (gst_no): ALWAYS fetch the GSTIN number belonging to the BUYER / Consignee (e.g. under "Buyer (Bill to)", "Consignee (Ship to)", or "Ship To"). Do NOT return the Seller/Supplier GSTIN.\n2. SUBTOTAL AMOUNT RULE (amount): If there are multiple line item amounts (e.g. item values + charges), ALWAYS extract the amount that is the sum of all those item amounts (the Total Taxable Value / Subtotal before tax, e.g. 11,33,600.00). Do not pick a single line item amount.\n3. SUM OF TAX RATES RULE (rate): In the rate column/field, ALWAYS extract the sum of all tax rate percentages as a single number. For example, if Output CGST is 9% and Output SGST is 9%, the rate must be 18 (because 9+9=18). If IGST is 18%, rate is 18.\n\nReturn ONLY a valid JSON object with these exact keys: ignore, document_type, gst_no, seller_name, buyer_name, bill_no, date, amount, rate, cgst, sgst, total_tax, total. For a Tax Invoice, set "ignore": false and "document_type": "Tax Invoice". If a field is missing, use an empty string.'
                                     },
                                     {
                                         type: 'image_url',
@@ -803,6 +1045,9 @@
                 tableBody.innerHTML = '';
                 resultsContainer.style.display = 'none';
                 processingStats.style.display = 'none';
+                heroSection.classList.remove('minimized');
+                mainContainer.classList.remove('table-centered');
+                floatingUploadBtn.classList.remove('visible');
             }
         }
 

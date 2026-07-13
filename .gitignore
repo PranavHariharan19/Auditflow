@@ -1,12 +1,36 @@
 # API Keys and Secrets
-.env.local
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
 
-# OS Files
+# Dependencies
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and Editor Files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+*.log
 
-# Project artifacts
+# Build and Deployment Artifacts
+.vercel/
+dist/
+build/
+*.pid
+*.seed
+*.pid.lock
+
+# Generated Audit Reports & Exports
 audit_report_*.xlsx
 auditflow_export.xlsx
-.vercel
+sample output/
